@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use FOS\MessageBundle\Model\ParticipantInterface;
 
 /**
  * Customer
@@ -15,7 +16,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Entity(repositoryClass="InventoryBundle\Repository\CustomerRepository")
  * @UniqueEntity("name")
  */
-class Customer extends BaseUser {
+class Customer extends BaseUser implements ParticipantInterface {
 
   /**
   * @ORM\Id
