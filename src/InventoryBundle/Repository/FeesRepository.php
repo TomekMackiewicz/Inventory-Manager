@@ -38,10 +38,10 @@ class FeesRepository extends EntityRepository {
 		}
 		
     if(!isset($numberOfActions['actionIn'])) {
-        $numberOfActions['actionIn'] = 0;
+       $numberOfActions['actionIn'] = 0;
     }
     if(!isset($numberOfActions['actionOut'])) {
-        $numberOfActions['actionOut'] = 0;
+       $numberOfActions['actionOut'] = 0;
     }    
 
 		return $feesTable = array_merge($fees,$numberOfActions);

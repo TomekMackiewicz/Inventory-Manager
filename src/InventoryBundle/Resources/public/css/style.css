@@ -10,3 +10,7 @@ body {
 .messenger_thread_message {
 	padding-bottom: 10px;
 }
+
+.new_message {
+	background-color: red;
+}

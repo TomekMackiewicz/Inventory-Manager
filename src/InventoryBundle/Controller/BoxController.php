@@ -14,8 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
  * Box controller.
  * @Route("box")
  */
-class BoxController extends Controller
-{
+class BoxController extends Controller {
+  
   /**
    * Lists all box entities.
    * @Route("/", name="box_index")

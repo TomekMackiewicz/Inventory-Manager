@@ -9,6 +9,7 @@ use InventoryBundle\Entity\Box;
 use InventoryBundle\Entity\Action;
 
 class DefaultController extends Controller {
+  
   /**
    * @Route("main")
    * @Template("::index.html.twig")
