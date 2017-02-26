@@ -79,4 +79,9 @@ fos_user:
             type: InventoryBundle\Form\CustomerType    
     from_email:
         address: "%mailer_user%"
-        sender_name: "%mailer_user%"    
+        sender_name: "%mailer_user%"
+
+fos_message:
+    db_driver: orm
+    thread_class: InventoryBundle\Entity\Thread
+    message_class: InventoryBundle\Entity\Message    

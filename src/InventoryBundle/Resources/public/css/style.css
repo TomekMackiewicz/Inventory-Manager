@@ -6,3 +6,7 @@ body {
 .btn {
 	margin-bottom:10px;
 }
+
+.messenger_thread_message {
+	padding-bottom: 10px;
+}

@@ -18,6 +18,7 @@ class AppKernel extends Kernel
             new InventoryBundle\InventoryBundle(),
             new Petkopara\MultiSearchBundle\PetkoparaMultiSearchBundle(),
             new FOS\UserBundle\FOSUserBundle(),
+            new FOS\MessageBundle\FOSMessageBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {
