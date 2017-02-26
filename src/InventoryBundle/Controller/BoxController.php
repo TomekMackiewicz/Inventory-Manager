@@ -34,7 +34,7 @@ class BoxController extends Controller {
         ->get('petkopara_multi_search.builder')
         ->searchForm($queryBuilder, $filterForm->get('search'));
       $query = $queryBuilder->getQuery();
-      $result = $query->getResult();
+      $result = $query->setMaxResults(100)->getResult();
 
       return [
         'filterForm' => $filterForm->createView(),            

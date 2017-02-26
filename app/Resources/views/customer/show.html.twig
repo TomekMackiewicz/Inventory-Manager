@@ -83,13 +83,15 @@
       </tr>                                  
     </tbody>
   </table>
-  <a href="{{ path('customer_index') }}" class="btn btn-default">Back to the list</a><br>
+  <a href="{{ path('customer_index') }}" class="btn btn-default inline">Back to the list</a>
 
-  <a href="{{ path('customer_edit', { 'id': customer.id }) }}" class="btn btn-default">Edit</a>
+  <a href="{{ path('customer_edit', { 'id': customer.id }) }}" class="btn btn-default inline">Edit</a>
 
   {{ form_start(delete_form) }}
-    <input type="submit" value="Delete" class="btn btn-danger">
+    <input type="submit" value="Delete" class="btn btn-danger inline">
   {{ form_end(delete_form) }}
+
+  <div class="clearfix">
 
   <h2>Show actions</h2>
 

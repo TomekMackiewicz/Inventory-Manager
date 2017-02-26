@@ -16,7 +16,7 @@ class ActionRepository extends EntityRepository {
 			"SELECT action 
 			 FROM InventoryBundle:Action action 
 			 ORDER BY action.date DESC"
-		)->setMaxResults(10)->getResult();
+		)->setMaxResults(5)->getResult();
 		return $lastActions;		
 	}
 

@@ -63,13 +63,15 @@
       </tr>
     </tbody>
   </table>
-  <a href="{{ path('fees_index') }}" class="btn btn-default">Back to the list</a><br>
+  <a href="{{ path('fees_index') }}" class="btn btn-default inline">Back to the list</a>
 
-  <a href="{{ path('fees_edit', { 'id': fee.id }) }}" class="btn btn-default">Edit</a>
+  <a href="{{ path('fees_edit', { 'id': fee.id }) }}" class="btn btn-default inline">Edit</a>
 
   {{ form_start(delete_form) }}
-    <input type="submit" value="Delete" class="btn btn-danger">
+    <input type="submit" value="Delete" class="btn btn-danger inline">
   {{ form_end(delete_form) }}
+
+  <div class="clearfix">
 
   <h2>Calculate Fee</h2>
   {{ form_start(calculateFeesForm, {'attr': {'id': 'calc'}}) }}
