@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+  {% if actionsFromTo is not null %}
+    <div id="resultTable">    
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <td>Action</td>
+            <td>Date</td>
+          </tr>  
+        </thead>         
+        <tbody>
+        {% for action in actionsFromTo %}
+          <tr>
+            <td>{{ action.action }}</td>
+            <td>{{ action.date|date('Y-m-d') }}</td>
+          </tr>                
+        {% endfor %}
+        </tbody>
+      </table> 
+    </div>
+  {% endif %}
+
+  <div class="modal fade" id="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Actions</h4>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+  <h1>Box</h1>
+
+  <table class="table table-striped">
+    <tbody>
+      <tr>
+        <th>Id</th>
+        <td>{{ box.id }}</td>
+      </tr>
+      <tr>
+        <th>Signature</th>
+        <td>{{ box.signature }}</td>
+      </tr>
+      <tr>
+        <th>Customer</th>
+        <td><a href="{{ path('customer_show', {'id':box.customer.id}) }}">{{ box.customer.name }}</a></td>
+      </tr>              
+      <tr>
+        <th>Status</th>
+        <td>{{ box.status }}</td>
+      </tr>
+      <tr>
+        <th>Last action</th>
+        <td>{% if box.lastAction %}{{ box.lastAction|date('Y-m-d') }}{% endif %}</td>
+      </tr>
+    </tbody>
+  </table>
+  <a href="{{ path('box_index') }}" class="btn btn-default inline">Back to the list</a><br>
+  <a href="{{ path('box_edit', { 'id': box.id }) }}" class="btn btn-default inline">Edit</a>
+  {{ form_start(delete_form, {'attr': {'class': 'inline'}}) }}
+    <input type="submit" value="Delete" class="btn btn-danger">
+  {{ form_end(delete_form) }}
+  <br>
+  <h2>Show actions</h2>
+
+  {{ form_start(actionsForm, {'attr': {'id': 'calc'}}) }}
+    {{ form_widget(actionsForm) }}
+    <input type="submit" value="Search" class="btn btn-default" id="modalShow" data-toggle="modal" data-target="#modal" />
+  {{ form_end(actionsForm) }}
+
+{% endblock %}

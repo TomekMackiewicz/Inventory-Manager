@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+  {% if actionsFromTo is not null %}
+    <div id="resultTable">    
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <td>Action</td>
+            <td>Signature</td>
+            <td>Date</td>
+          </tr>  
+        </thead>  
+        <tbody>
+        {% for action in actionsFromTo %}
+          <tr>
+            <td>{{ action.action }}</td>
+            <td>{{ action.box.signature }}</td>
+            <td>{{ action.date|date('Y-m-d') }}</td>
+          </tr>                
+        {% endfor %}
+        </tbody>
+      </table> 
+    </div>
+  {% endif %}
+
+  <div class="modal fade" id="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Actions</h4>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+  <h1>Customer: {{ customer.name }}</h1>
+
+  <table class="table table-striped">
+    <tbody>
+      <tr>
+        <th>Id</th>
+        <td>{{ customer.id }}</td>
+      </tr>
+      <tr>
+        <th>Company Name</th>
+        <td>{{ customer.name }}</td>
+      </tr>
+      <tr>
+        <th>Address</th>
+        <td>{{ customer.address }}</td>
+      </tr>
+      <tr>
+        <th>Number of boxes</th>
+        <td>{{ customer.boxes|length }}</td>
+      </tr>    
+      <tr>
+        <th>Number of boxes in</th>
+        <td>
+          {% if boxesIn.0.boxCount is defined %}
+            {{ boxesIn.0.boxCount }}
+          {% else %}
+            0
+          {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <th>Number of boxes out</th>
+        <td>
+          {% if boxesOut.0.boxCount is defined %}
+            {{ boxesOut.0.boxCount }}
+          {% else %}
+            0
+          {% endif %}
+        </td>
+      </tr>                                  
+    </tbody>
+  </table>
+  <a href="{{ path('customer_index') }}" class="btn btn-default">Back to the list</a><br>
+
+  <a href="{{ path('customer_edit', { 'id': customer.id }) }}" class="btn btn-default">Edit</a>
+
+  {{ form_start(delete_form) }}
+    <input type="submit" value="Delete" class="btn btn-danger">
+  {{ form_end(delete_form) }}
+
+  <h2>Show actions</h2>
+
+  {{ form_start(actionsForm, {'attr': {'id': 'calc'}}) }}
+    {{ form_widget(actionsForm) }}
+    <input type="submit" value="Search" class="btn btn-default" id="modalShow" data-toggle="modal" data-target="#modal" />
+  {{ form_end(actionsForm) }}
+
+{% endblock %}
