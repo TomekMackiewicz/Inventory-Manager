@@ -2,8 +2,14 @@
 
 {% block body %}
 
-  {% if feesTable is not null %}
-    <div id="resultTable">     
+
+  <div id="resultTable">
+
+    {% if datesError is not null %}
+      <div class="alert alert-danger" role="alert">{{datesError}}</div>
+    {% endif %}
+
+    {% if feesTable is not null %}
       <table class="table table-striped">
         <tr>
           <td>Storage</td>
@@ -22,8 +28,9 @@
           <td>{{ sum }}</td>
         </tr>                                         
       </table>
-    </div>    
-  {% endif %} 
+    {% endif %} 
+
+  </div>    
 
   <div class="modal fade" id="modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">

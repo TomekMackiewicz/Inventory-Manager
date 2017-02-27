@@ -2,8 +2,13 @@
 
 {% block body %}
 
-  {% if actionsFromTo is not null %}
-    <div id="resultTable">    
+  <div id="resultTable">  
+
+    {% if datesError is not null %}
+      <div class="alert alert-danger" role="alert">{{datesError}}</div>
+    {% endif %}
+    
+    {% if actionsFromTo is not null %}
       <table class="table table-striped">
         <thead>
           <tr>
@@ -22,8 +27,8 @@
         {% endfor %}
         </tbody>
       </table> 
-    </div>
-  {% endif %}
+    {% endif %}
+  </div>
 
   <div class="modal fade" id="modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">

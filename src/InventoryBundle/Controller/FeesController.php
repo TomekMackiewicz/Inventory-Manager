@@ -74,7 +74,6 @@ class FeesController extends Controller {
       $dateFrom = $calculateFeesForm["dateFrom"]->getData()->format('Y-m-d');
       $dateTo = $calculateFeesForm["dateTo"]->getData()->format('Y-m-d');
       if( strtotime($dateFrom) < strtotime($dateTo) ) {
-        $datesError = null;
         $start = (new \DateTime($dateFrom))->modify('first day of this month');
         $end = (new \DateTime($dateTo))->modify('first day of next month');
         $interval = $end->diff($start);

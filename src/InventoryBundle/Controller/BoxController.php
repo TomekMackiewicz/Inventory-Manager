@@ -81,6 +81,7 @@ class BoxController extends Controller {
    */
   public function showAction(Request $request, Box $box) {
     $actionsFromTo = null;
+    $datesError = null;
     $em = $this->getDoctrine()->getManager();
     $repo = $this->getDoctrine()->getRepository('InventoryBundle:Action');
     $actionsForm = $this->createForm('InventoryBundle\Form\ActionType');
@@ -88,15 +89,19 @@ class BoxController extends Controller {
     if ($actionsForm->isSubmitted() && $actionsForm->isValid()) {
       $dateFrom = $actionsForm["dateFrom"]->getData()->format('Y-m-d');
       $dateTo = $actionsForm["dateTo"]->getData()->format('Y-m-d');
-      $actionsFromTo = $em->getRepository('InventoryBundle:Action')
-        ->boxActionsFromTo($box->getId(), $dateFrom, $dateTo);
+      if( strtotime($dateFrom) < strtotime($dateTo) ) {
+        $actionsFromTo = $em->getRepository('InventoryBundle:Action')
+          ->boxActionsFromTo($box->getId(), $dateFrom, $dateTo);
+      } else {
+          $datesError = "Start value can't be higher than end date!";        
+      }
     }
-
     return [
       'box' => $box,
       'actionsForm' => $actionsForm->createView(),
       'actionsFromTo' => $actionsFromTo,            
-      'delete_form' => $this->createDeleteForm($box)->createView()
+      'delete_form' => $this->createDeleteForm($box)->createView(),
+      'datesError' => $datesError
     ];
   }
 

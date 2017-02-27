@@ -60,6 +60,7 @@ class CustomerController extends Controller {
    */
   public function showAction(Request $request, Customer $customer) {
     $actionsFromTo = null;
+    $datesError = null;
     $em = $this->getDoctrine()->getManager(); 
     $repo = $this->getDoctrine()->getRepository('InventoryBundle:Action');
     $boxesIn  = $em->getRepository('InventoryBundle:Customer')->boxesInCountByCustomer($customer->getId());
@@ -69,8 +70,13 @@ class CustomerController extends Controller {
     if ($actionsForm->isSubmitted() && $actionsForm->isValid()) {
       $dateFrom = $actionsForm["dateFrom"]->getData()->format('Y-m-d');
       $dateTo = $actionsForm["dateTo"]->getData()->format('Y-m-d');
-      $actionsFromTo = $em->getRepository('InventoryBundle:Action')
-        ->customerActionsFromTo($customer->getId(), $dateFrom, $dateTo);
+      if( strtotime($dateFrom) < strtotime($dateTo) ) {
+        $actionsFromTo = $em->getRepository('InventoryBundle:Action')
+          ->customerActionsFromTo($customer->getId(), $dateFrom, $dateTo);
+      } else {
+          $datesError = "Start value can't be higher than end date!";
+      }
+
     }
     return [
       'customer' => $customer,
@@ -78,7 +84,8 @@ class CustomerController extends Controller {
       'boxesIn' =>$boxesIn,
       'boxesOut' =>$boxesOut,
       'actionsForm' => $actionsForm->createView(),
-      'actionsFromTo' => $actionsFromTo
+      'actionsFromTo' => $actionsFromTo,
+      'datesError' => $datesError
     ];
   }
 
