@@ -23,7 +23,7 @@ class BoxController extends Controller {
    * @Template("box/index.html.twig")
    */
   public function indexAction(Request $request) {      
-    $search = $request->get('search');
+    //$search = $request->get('search');
     $em = $this->getDoctrine()->getManager();
     $queryBuilder = $em->getRepository('InventoryBundle:Box')->createQueryBuilder('e');
     $filterForm = $this->createForm('InventoryBundle\Form\BoxFilterType');

@@ -61,12 +61,19 @@ class CustomerController extends Controller {
   public function showAction(Request $request, Customer $customer) {
     $actionsFromTo = null;
     $datesError = null;
+    $result = null;
+
     $em = $this->getDoctrine()->getManager(); 
     $repo = $this->getDoctrine()->getRepository('InventoryBundle:Action');
     $boxesIn  = $em->getRepository('InventoryBundle:Customer')->boxesInCountByCustomer($customer->getId());
     $boxesOut = $em->getRepository('InventoryBundle:Customer')->boxesOutCountByCustomer($customer->getId());
     $actionsForm = $this->createForm('InventoryBundle\Form\ActionType');
     $actionsForm->handleRequest($request);
+
+    $queryBuilder = $em->getRepository('InventoryBundle:Box')->createQueryBuilder('e');
+    $filterForm = $this->createForm('InventoryBundle\Form\BoxFilterType');
+    $filterForm->handleRequest($request);  
+
     if ($actionsForm->isSubmitted() && $actionsForm->isValid()) {
       $dateFrom = $actionsForm["dateFrom"]->getData()->format('Y-m-d');
       $dateTo = $actionsForm["dateTo"]->getData()->format('Y-m-d');
@@ -76,8 +83,16 @@ class CustomerController extends Controller {
       } else {
           $datesError = "Start value can't be higher than end date!";
       }
-
     }
+
+    if ($filterForm->isSubmitted() && $filterForm->isValid()) {
+      $queryBuilder = $this
+        ->get('petkopara_multi_search.builder')
+        ->searchForm($queryBuilder, $filterForm->get('search'));
+      $query = $queryBuilder->getQuery();
+      $result = $query->setMaxResults(100)->getResult();
+    }   
+
     return [
       'customer' => $customer,
       'delete_form' => $this->createDeleteForm($customer)->createView(),
@@ -85,7 +100,9 @@ class CustomerController extends Controller {
       'boxesOut' =>$boxesOut,
       'actionsForm' => $actionsForm->createView(),
       'actionsFromTo' => $actionsFromTo,
-      'datesError' => $datesError
+      'datesError' => $datesError,
+      'filterForm' => $filterForm->createView(),
+      'searchResults' => $result
     ];
   }
 

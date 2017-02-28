@@ -40,6 +40,9 @@ class ProfileController extends Controller {
     }
 
     $actionsFromTo = null;
+    $datesError = null;
+    $result = null;
+
     $em = $this->getDoctrine()->getManager(); 
     $customer = $em->getRepository('InventoryBundle:Customer')->find($user->getId());    
     $repo = $this->getDoctrine()->getRepository('InventoryBundle:Action');
@@ -47,20 +50,45 @@ class ProfileController extends Controller {
     $boxesOut = $em->getRepository('InventoryBundle:Customer')->boxesOutCountByCustomer($user->getId());
     $actionsForm = $this->createForm('InventoryBundle\Form\ActionType');
     $actionsForm->handleRequest($request);
+
+    $queryBuilder = $em->getRepository('InventoryBundle:Box')->createQueryBuilder('e');
+
+    $filterForm = $this->createForm('InventoryBundle\Form\BoxFilterType');
+    $filterForm->handleRequest($request);  
+
     if ($actionsForm->isSubmitted() && $actionsForm->isValid()) {
       $dateFrom = $actionsForm["dateFrom"]->getData()->format('Y-m-d');
       $dateTo = $actionsForm["dateTo"]->getData()->format('Y-m-d');
-      $actionsFromTo = $em->getRepository('InventoryBundle:Action')
-        ->customerActionsFromTo($user->getId(), $dateFrom, $dateTo);
+      if( strtotime($dateFrom) < strtotime($dateTo) ) {
+        $actionsFromTo = $em->getRepository('InventoryBundle:Action')
+          ->customerActionsFromTo($customer->getId(), $dateFrom, $dateTo);
+      } else {
+          $datesError = "Start value can't be higher than end date!";
+      }
     }
  
+    if ($filterForm->isSubmitted() && $filterForm->isValid()) {
+      $queryBuilder = $this
+        ->get('petkopara_multi_search.builder')
+        ->searchForm($queryBuilder, $filterForm->get('search'));
+        // ->andWhere(
+        //     $queryBuilder->expr()->like('e.customer_id', ':customer_id')
+        //   )
+        // ->setParameter('customer_id', '%7%');        
+      $query = $queryBuilder->getQuery();
+      $result = $query->setMaxResults(100)->getResult();
+    } 
+
     return $this->render('@FOSUser/Profile/show.html.twig', array(
       'user' => $user,
       'customer' => $customer,
       'boxesIn' =>$boxesIn,
       'boxesOut' =>$boxesOut,
       'actionsForm' => $actionsForm->createView(),
-      'actionsFromTo' => $actionsFromTo
+      'actionsFromTo' => $actionsFromTo,
+      'datesError' => $datesError,      
+      'filterForm' => $filterForm->createView(),
+      'searchResults' => $result                
     ));
   }
 

@@ -4,6 +4,42 @@
 
   <div id="resultTable">  
 
+    {% if searchResults is not null %}
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Signature</th>
+            <th>Customer</th>
+            <th>Status</th>
+            <th>Last action</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for box in searchResults %}
+          <tr>
+            <td><a href="{{ path('box_show', { 'id': box.id }) }}">{{ box.id }}</a></td>
+            <td>{{ box.signature }}</td>
+            <td><a href="{{ path('customer_show', {'id':box.customer.id}) }}">{{ box.customer.name }}</a></td>
+            <td>{{ box.status }}</td>
+            <td>{% if box.lastAction %}{{ box.lastAction|date('Y-m-d') }}{% endif %}</td>
+            <td>
+              <ul>
+                <li>
+                  <a href="{{ path('box_show', { 'id': box.id }) }}">show</a>
+                </li>
+                <li>
+                  <a href="{{ path('box_edit', { 'id': box.id }) }}">edit</a>
+                </li>                       
+              </ul>
+            </td>
+          </tr>                
+        {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+
     {% if datesError is not null %}
       <div class="alert alert-danger" role="alert">{{datesError}}</div>
     {% endif %}
@@ -35,7 +71,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">Actions</h4>
+          <h4 class="modal-title">Results</h4>
         </div>
         <div class="modal-body">
         </div>
@@ -98,11 +134,25 @@
 
   <div class="clearfix">
 
-  <h2>Show actions</h2>
+  <div class="row">
+    <div class="col-md-6">
+      <h2>Show actions</h2>
 
-  {{ form_start(actionsForm, {'attr': {'id': 'calc'}}) }}
-    {{ form_widget(actionsForm) }}
-    <input type="submit" value="Search" class="btn btn-default" id="modalShow" data-toggle="modal" data-target="#modal" />
-  {{ form_end(actionsForm) }}
+      {{ form_start(actionsForm, {'attr': {'class': 'modal-form'}}) }}
+        {{ form_widget(actionsForm) }}
+        <input type="submit" value="Search" class="btn btn-default" data-toggle="modal" data-target="#modal" />
+      {{ form_end(actionsForm) }}
+    </div>
+    <div class="col-md-6">
+      <h2>Search box</h2>
+
+      {% if filterForm is defined %}
+        {{ form_start(filterForm, {'attr': {'class': 'modal-form'}}) }}
+          {{ form_widget(filterForm) }}
+          <input type="submit" value="Search" class="btn btn-default inline" data-toggle="modal" data-target="#modal" />
+        {{ form_end(filterForm) }}
+      {% endif %}      
+    </div>
+  </div>  
 
 {% endblock %}
