@@ -1,4 +1,11 @@
 InventoryManager
 ================
 
-A Symfony project created on February 20, 2017, 9:56 pm.
+System magazynowy:
+1. Konta użytkowników (rejestracja, edycja)
+2. Statystyki i stan magazynu
+3. Zaawansowane wyszukiwanie
+4. Historia usług i czynności magazynowych
+5. Tabele opłat
+
+PHP (Symfony 2.8), jQuery
