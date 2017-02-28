@@ -18,23 +18,25 @@
         </thead>
         <tbody>
         {% for box in searchResults %}
-          <tr>
-            <td><a href="{{ path('box_show', { 'id': box.id }) }}">{{ box.id }}</a></td>
-            <td>{{ box.signature }}</td>
-            <td><a href="{{ path('customer_show', {'id':box.customer.id}) }}">{{ box.customer.name }}</a></td>
-            <td>{{ box.status }}</td>
-            <td>{% if box.lastAction %}{{ box.lastAction|date('Y-m-d') }}{% endif %}</td>
-            <td>
-              <ul>
-                <li>
-                  <a href="{{ path('box_show', { 'id': box.id }) }}">show</a>
-                </li>
-                <li>
-                  <a href="{{ path('box_edit', { 'id': box.id }) }}">edit</a>
-                </li>                       
-              </ul>
-            </td>
-          </tr>                
+          {% if box.customer.id == customer.id %}          
+            <tr>
+              <td><a href="{{ path('box_show', { 'id': box.id }) }}">{{ box.id }}</a></td>
+              <td>{{ box.signature }}</td>
+              <td><a href="{{ path('customer_show', {'id':box.customer.id}) }}">{{ box.customer.name }}</a></td>
+              <td>{{ box.status }}</td>
+              <td>{% if box.lastAction %}{{ box.lastAction|date('Y-m-d') }}{% endif %}</td>
+              <td>
+                <ul>
+                  <li>
+                    <a href="{{ path('box_show', { 'id': box.id }) }}">show</a>
+                  </li>
+                  <li>
+                    <a href="{{ path('box_edit', { 'id': box.id }) }}">edit</a>
+                  </li>                       
+                </ul>
+              </td>
+            </tr>
+          {% endif %}               
         {% endfor %}
         </tbody>
       </table>

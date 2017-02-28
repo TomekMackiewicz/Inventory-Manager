@@ -18,23 +18,25 @@
         </thead>
         <tbody>
         {% for box in searchResults %}
-          <tr>
-            <td><a href="{{ path('box_show', { 'id': box.id }) }}">{{ box.id }}</a></td>
-            <td>{{ box.signature }}</td>
-            <td><a href="{{ path('customer_show', {'id':box.customer.id}) }}">{{ box.customer.name }}</a></td>
-            <td>{{ box.status }}</td>
-            <td>{% if box.lastAction %}{{ box.lastAction|date('Y-m-d') }}{% endif %}</td>
-            <td>
-              <ul>
-                <li>
-                  <a href="{{ path('box_show', { 'id': box.id }) }}">show</a>
-                </li>
-                <li>
-                  <a href="{{ path('box_edit', { 'id': box.id }) }}">edit</a>
-                </li>                       
-              </ul>
-            </td>
-          </tr>                
+          {% if box.customer.id == customer.id %}          
+            <tr>
+              <td><a href="{{ path('box_show', { 'id': box.id }) }}">{{ box.id }}</a></td>
+              <td>{{ box.signature }}</td>
+              <td><a href="{{ path('customer_show', {'id':box.customer.id}) }}">{{ box.customer.name }}</a></td>
+              <td>{{ box.status }}</td>
+              <td>{% if box.lastAction %}{{ box.lastAction|date('Y-m-d') }}{% endif %}</td>
+              <td>
+                <ul>
+                  <li>
+                    <a href="{{ path('box_show', { 'id': box.id }) }}">show</a>
+                  </li>
+                  <li>
+                    <a href="{{ path('box_edit', { 'id': box.id }) }}">edit</a>
+                  </li>                       
+                </ul>
+              </td>
+            </tr>  
+          {% endif %}                         
         {% endfor %}
         </tbody>
       </table>
@@ -103,7 +105,8 @@
       <tr>
         <th>Email</th>
         <td>{{ user.email }}</td>
-      </tr>      
+      </tr>  
+      {% if is_granted('ROLE_ADMIN') == false %}    
       <tr>
         <th>Number of boxes</th>
         <td>{{ customer.boxes|length }}</td>
@@ -127,29 +130,31 @@
             0
           {% endif %}
         </td>
-      </tr>                                  
+      </tr>
+      {% endif %}                                  
     </tbody>
   </table>
 
-  <div class="row">
-    <div class="col-md-6">
-      <h2>Show actions</h2>
+  {% if is_granted('ROLE_ADMIN') == false %}
+    <div class="row">
+      <div class="col-md-6">
+        <h2>Show actions</h2>
 
-      {{ form_start(actionsForm, {'attr': {'class': 'modal-form'}}) }}
-        {{ form_widget(actionsForm) }}
-        <input type="submit" value="Search" class="btn btn-default" data-toggle="modal" data-target="#modal" />
-      {{ form_end(actionsForm) }}
-    </div>
-    <div class="col-md-6">
-      <h2>Search box</h2>
+        {{ form_start(actionsForm, {'attr': {'class': 'modal-form'}}) }}
+          {{ form_widget(actionsForm) }}
+          <input type="submit" value="Search" class="btn btn-default" data-toggle="modal" data-target="#modal" />
+        {{ form_end(actionsForm) }}
+      </div>
+      <div class="col-md-6">
+        <h2>Search box</h2>
 
-      {% if filterForm is defined %}
-        {{ form_start(filterForm, {'attr': {'class': 'modal-form'}}) }}
-          {{ form_widget(filterForm) }}
-          <input type="submit" value="Search" class="btn btn-default inline" data-toggle="modal" data-target="#modal" />
-        {{ form_end(filterForm) }}
-      {% endif %}      
-    </div>
-  </div>  
- 
+        {% if filterForm is defined %}
+          {{ form_start(filterForm, {'attr': {'class': 'modal-form'}}) }}
+            {{ form_widget(filterForm) }}
+            <input type="submit" value="Search" class="btn btn-default inline" data-toggle="modal" data-target="#modal" />
+          {{ form_end(filterForm) }}
+        {% endif %}      
+      </div>
+    </div>  
+  {% endif %} 
 {% endblock %}

@@ -71,6 +71,7 @@ class ProfileController extends Controller {
       $queryBuilder = $this
         ->get('petkopara_multi_search.builder')
         ->searchForm($queryBuilder, $filterForm->get('search'));
+        // Szybki fix w twigu, zrobić potem tu!
         // ->andWhere(
         //     $queryBuilder->expr()->like('e.customer_id', ':customer_id')
         //   )
